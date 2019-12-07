@@ -1,24 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import logo from "./walden-logo.png";
+import { Lottery } from "./Lottery";
 
-const App: React.FC = () => {
+function App() {
+  const [goAgain, setGoAgain] = React.useState(false);
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
+        <img src={logo} alt="Walden School Logo" />
+        <h1>Walden School of Liberal Arts</h1>
+        <h2>Admission Lottery Application</h2>
+        {goAgain ? (
+          <p>Thank you for submitting an application to the lottery.</p>
+        ) : (
+          <p>
+            Please submit one application per student, per year you wish to be
+            in the lottery.
+          </p>
+        )}
+        <a href={`#lottery-application`} onClick={(e: any) => {goAgain && window.location.reload()}}>
+          {goAgain ? 'Submit another' : 'Begin'}
         </a>
       </header>
+      <Lottery onSubmitted={() => setGoAgain(true)} />
     </div>
   );
 }
