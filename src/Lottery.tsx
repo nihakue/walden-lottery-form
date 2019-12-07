@@ -33,10 +33,12 @@ export function Lottery({onSubmitted}: {onSubmitted: () => void}) {
   const grade = watch(ENTERING_GRADE);
   const siblingsAttending = watch(SIBLINGS_ATTENDING);
   const siblingsApplying = watch(SIBLINGS_APPLYING);
+  // On Oct 1 at midnight in MST, switch to allowing the next year, stop allowing the previous
   const validYears = React.useMemo(() => {
     const now = new Date();
-    const year = now.getUTCFullYear();
-    return [year, year+1];
+    const switchesAt = new Date(Date.UTC(now.getFullYear(), 9, 1, 6));
+    const earliestYear = now > switchesAt ? now.getFullYear() : now.getFullYear() - 1;
+    return [earliestYear, earliestYear + 1];
   }, [])
 
   const submit = React.useCallback(async (formData: any, e: any) => {
