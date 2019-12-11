@@ -17,6 +17,8 @@ const GENDER = "entry.977251992";
 const SIBLINGS_APPLYING = "entry.1167648643";
 const SIBLINGS_APPLYING_NAMES = "entry.473053907";
 
+const BOOLEAN_FIELDS = [SIBLINGS_APPLYING, SIBLINGS_ATTENDING];
+
 const SIMPLE_TERMS = [
   {title: "This is not a registration application!", desc: "I understand that this application does not guarantee my child(ren) placement at this school."},
   {title: "All lottery applications have an equal chance of being picked (regardless of how old or new the application is), with a few exceptions:", desc: "I understand that all openings are filled via a random lottery, with initial preference given to faculty students and siblings of enrolled students as set forth in state law and our Charter."},
@@ -45,12 +47,17 @@ export function Lottery({onSubmitted}: {onSubmitted: () => void}) {
 
   const submit = React.useCallback(async (formData: any, e: any) => {
     setSubmitting(true);
+    const formDataObject = new FormData(e.target);
+    BOOLEAN_FIELDS.forEach(f => {
+      const value = formDataObject.get(f);
+      formDataObject.set(f, value === 'on' ? 'TRUE' : 'FALSE');
+    });
     try {
       await fetch('https://docs.google.com/forms/u/0/d/e/1FAIpQLSdBUWzMY-tT4DkXlMqjv6HBPeiIU1pqFwOK356GXnnMoZwqmg/formResponse', {
         method: 'post',
         mode: 'no-cors',
         //@ts-ignore
-        body: new URLSearchParams(new FormData(e.target)),
+        body: new URLSearchParams(formDataObject),
       });
       onSubmitted();
       setError(false);
