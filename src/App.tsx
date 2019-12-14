@@ -17,9 +17,10 @@ function App() {
             in the lottery.
           </p>
         }
-        <a href={`#lottery-application`} onClick={(e: any) => {goAgain && window.location.reload()}}>
+        <a href={`#lottery-application`}>
           {goAgain ? 'Submit another' : 'Begin'}
         </a>
+        {goAgain && <a href="/">Start over</a>}
       </header>
       <Lottery onSubmitted={() => setGoAgain(true)} />
     </div>

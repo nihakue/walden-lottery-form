@@ -25,8 +25,13 @@ const SIMPLE_TERMS = [
   {title: "Lottery applications only last for one year!", desc: "I understand that I must re-apply each school year that I wish to be considered in the lottery."}
 ]
 
+function scrollToTop() {
+  document.body.scrollTop = 0; // For Safari
+  document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+}
+
 export function Lottery({onSubmitted}: {onSubmitted: () => void}) {
-  const { register, handleSubmit, watch, errors } = useForm();
+  const { register, handleSubmit, watch, errors, setValue } = useForm();
   const [submitting, setSubmitting] = React.useState(false);
   const [error, setError] = React.useState<undefined | boolean>();
 
@@ -44,6 +49,11 @@ export function Lottery({onSubmitted}: {onSubmitted: () => void}) {
   const siblingsAttending = watch(SIBLINGS_ATTENDING);
   const siblingsApplying = watch(SIBLINGS_APPLYING);
   
+  const clearApplicant = React.useCallback(() => {
+    [FULL_NAME, SCHOOL_YEAR, ENTERING_GRADE, DATE_OF_BIRTH, GENDER].forEach(f => {
+      setValue(f, '');
+    })
+  }, [setValue]);
 
   const submit = React.useCallback(async (formData: any, e: any) => {
     setSubmitting(true);
@@ -61,6 +71,8 @@ export function Lottery({onSubmitted}: {onSubmitted: () => void}) {
       });
       onSubmitted();
       setError(false);
+      clearApplicant();
+      scrollToTop();
     } catch (e) {
       console.error(e);
       setError(true);
@@ -68,10 +80,6 @@ export function Lottery({onSubmitted}: {onSubmitted: () => void}) {
       setSubmitting(false);
     }
   }, [onSubmitted]);
-
-  if (error === false) {
-    return null;
-  }
 
   return (
       <form
