@@ -268,7 +268,7 @@ function ErrorMessage({ errors, name }: {errors: any, name: string}) {
   if (!errors[name]) return null;
   console.log(errors);
   // @ts-ignore
-  return <span className='validation-error'>{ERROR_MESSAGES[errors[name].type]}</span>;
+  return <div className='validation-error'>{ERROR_MESSAGES[errors[name].type]}</div>;
 };
 
 function Field({name, errors, children}: any) {
