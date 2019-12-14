@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
 import logo from "./walden-logo.png";
-import { Lottery } from "./Lottery";
+import { LotteryForm } from "./LotteryForm";
 
 function App() {
   const [goAgain, setGoAgain] = React.useState(false);
@@ -22,7 +22,7 @@ function App() {
         </a>
         {goAgain && <a href="/">Start over</a>}
       </header>
-      <Lottery onSubmitted={() => setGoAgain(true)} />
+      <LotteryForm onSubmitted={() => setGoAgain(true)} />
     </div>
   );
 }

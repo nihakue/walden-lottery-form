@@ -1,6 +1,9 @@
 import React from "react";
 import useForm from "react-hook-form";
-import "./App.css";
+import { Field } from "./Field";
+import { Term } from "./Term";
+import { scrollToTop } from "./scrollToTop";
+import { useValidYears } from "./useValidYears";
 
 
 const FULL_NAME = "entry.238038247";
@@ -25,23 +28,11 @@ const SIMPLE_TERMS = [
   {title: "Lottery applications only last for one year!", desc: "I understand that I must re-apply each school year that I wish to be considered in the lottery."}
 ]
 
-function scrollToTop() {
-  document.body.scrollTop = 0; // For Safari
-  document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-}
-
-export function Lottery({onSubmitted}: {onSubmitted: () => void}) {
+export function LotteryForm({onSubmitted}: {onSubmitted: () => void}) {
   const { register, handleSubmit, watch, errors, setValue } = useForm();
   const [submitting, setSubmitting] = React.useState(false);
   const [error, setError] = React.useState<undefined | boolean>();
-
-  // On Oct 1 at midnight in MST, switch to allowing the next year, stop allowing the previous
-  const validYears = React.useMemo(() => {
-    const now = new Date();
-    const switchesAt = new Date(Date.UTC(now.getFullYear(), 9, 1, 6));
-    const earliestYear = now > switchesAt ? now.getFullYear() : now.getFullYear() - 1;
-    return [earliestYear, earliestYear + 1];
-  }, [])
+  const validYears = useValidYears();
 
   const name = watch(FULL_NAME) || 'the applicant';
   const schoolYear = watch(SCHOOL_YEAR) || 'the school year';
@@ -243,39 +234,3 @@ export function Lottery({onSubmitted}: {onSubmitted: () => void}) {
       </form>
   );
 };
-
-function Term({title, desc, register, errors}: any) {
-  return (
-    <Field name={title} errors={errors}>
-      <label htmlFor={title}>{title}</label>
-      <label htmlFor={title}>{desc}</label>
-      <span className="radio-group">
-        <input ref={register({validate: (value: any) => value === 'accept'})} type="radio" name={title} value="accept"></input>
-        <label htmlFor="accept">I accept</label>
-        <input ref={register} type="radio" name={title} value="decline"></input>
-        <label htmlFor="decline">I do not accept</label>
-      </span>
-    </Field>
-  );
-}
-
-const ERROR_MESSAGES = {
-  required: 'This field is required',
-  validate: 'You must read and accept these terms to submit',
-}
-
-function ErrorMessage({ errors, name }: {errors: any, name: string}) {
-  if (!errors[name]) return null;
-  console.log(errors);
-  // @ts-ignore
-  return <div className='validation-error'>{ERROR_MESSAGES[errors[name].type]}</div>;
-};
-
-function Field({name, errors, children}: any) {
-  return (
-    <div className="form-group">
-      {children}
-      <ErrorMessage errors={errors} name={name} />
-    </div>
-  )
-}
