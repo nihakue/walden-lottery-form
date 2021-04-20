@@ -79,7 +79,7 @@ export function LotteryForm({onSubmitted}: {onSubmitted: () => void}) {
     } finally {
       setSubmitting(false);
     }
-  }, [onSubmitted]);
+  }, [onSubmitted, clearApplicant]);
 
   return (
       <form
