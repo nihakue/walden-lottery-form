@@ -85,7 +85,7 @@ export function LotteryForm({onSubmitted}: {onSubmitted: () => void}) {
       <form
         onSubmit={handleSubmit(submit)}
       >
-        <a id="lottery-application"></a>
+        <span aria-hidden="true" id="lottery-application"></span>
         <Field name={FULL_NAME} errors={errors}>
           <label htmlFor={FULL_NAME}>What is this student's full name?</label>
           <input ref={register({required: true})} type="text" name={FULL_NAME}></input>
