@@ -19,6 +19,7 @@ const POSTAL_ADDRESS = "entry.21119083";
 const GENDER = "entry.977251992";
 const SIBLINGS_APPLYING = "entry.1167648643";
 const SIBLINGS_APPLYING_NAMES = "entry.473053907";
+const HOW_DID_YOU_HEAR = "entry.336463335";
 
 const BOOLEAN_FIELDS = [SIBLINGS_APPLYING, SIBLINGS_ATTENDING];
 
@@ -26,6 +27,14 @@ const SIMPLE_TERMS = [
   {title: "This is not a registration application!", desc: "I understand that this application does not guarantee my child(ren) placement at this school."},
   {title: "All lottery applications have an equal chance of being picked (regardless of how old or new the application is), with a few exceptions:", desc: "I understand that all openings are filled via a random lottery, with initial preference given to faculty students and siblings of enrolled students as set forth in state law and our Charter."},
   {title: "Lottery applications only last for one year!", desc: "I understand that I must re-apply each school year that I wish to be considered in the lottery."}
+]
+
+const REFS = [
+  "Word of mouth (friend or family)",
+  "KUER ad",
+  "Online Search",
+  "IB School Locator",
+  "Other"
 ]
 
 export function LotteryForm({onSubmitted}: {onSubmitted: () => void}) {
@@ -228,6 +237,19 @@ export function LotteryForm({onSubmitted}: {onSubmitted: () => void}) {
             errors={errors}
           />
         )}
+
+        <Field name={HOW_DID_YOU_HEAR} errors={errors}>
+        <label
+            htmlFor={HOW_DID_YOU_HEAR}
+          >{`How did you hear about Walden? (optional)`}</label>
+          <select ref={register({required: false})} name={HOW_DID_YOU_HEAR}>
+            <option></option>
+            {REFS
+              .map((refType) => (
+                <option key={refType}>{refType}</option>
+              ))}
+          </select>
+        </Field>
 
         <input type="submit" value={submitting ? 'Submitting...' : 'Submit'}/>
         {error && <span>Something went wrong. Please try again.</span>}
